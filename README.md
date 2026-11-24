@@ -1,5 +1,7 @@
 # 接口自动化测试框架（Python + Requests + pytest）
 
+[![api-test](https://github.com/kongjiayi511/api-auto-test/actions/workflows/test.yml/badge.svg)](https://github.com/kongjiayi511/api-auto-test/actions/workflows/test.yml)
+
 针对公开 REST API 的接口自动化测试项目。把「手工点 Postman 看返回」换成
 「一条命令批量执行、自动判定对错、失败可回溯」。
 
@@ -29,7 +31,7 @@
 ## 快速验证（3 条命令）
 
 ```bash
-git clone https://github.com/<your-name>/api-auto-test.git
+git clone https://github.com/kongjiayi511/api-auto-test.git
 cd api-auto-test
 pip install -r requirements.txt
 python -m pytest
