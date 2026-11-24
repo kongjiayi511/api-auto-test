@@ -28,13 +28,23 @@ _config = _load()
 # 对外暴露的配置值，其他模块直接 from common.config import BASE_URL 即可
 BASE_URL = _config["server"]["base_url"].strip()
 TIMEOUT = _config["server"].getint("timeout")
+
+# 异常场景站点。允许配置里没有这一节（老配置文件照样能用），
+# 所以先判断 has_section 再取值，避免 KeyError 把整个测试带崩。
+ALT_BASE_URL = (
+    _config["alt_env"]["base_url"].strip()
+    if _config.has_section("alt_env") and _config["alt_env"].get("base_url")
+    else ""
+)
+
 LOG_LEVEL = _config["log"]["level"].strip().upper()
 LOG_FILE = os.path.join(BASE_DIR, _config["log"]["file"].strip())
 
 
 if __name__ == "__main__":
     # 单独运行本文件可以检查配置读得对不对
-    print("BASE_URL :", BASE_URL)
-    print("TIMEOUT  :", TIMEOUT, type(TIMEOUT).__name__)
-    print("LOG_LEVEL:", LOG_LEVEL)
-    print("LOG_FILE :", LOG_FILE)
+    print("BASE_URL    :", BASE_URL)
+    print("ALT_BASE_URL:", ALT_BASE_URL)
+    print("TIMEOUT     :", TIMEOUT, type(TIMEOUT).__name__)
+    print("LOG_LEVEL   :", LOG_LEVEL)
+    print("LOG_FILE    :", LOG_FILE)

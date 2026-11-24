@@ -1,7 +1,8 @@
 name: api-test
 
-# 每次 push 和 PR 都自动跑一遍用例
-# 仓库首页会出现一个绿勾 / 红叉 —— 任何人点进来都能看到用例是否真的通过
+# 每次 push 和 PR 都自动跑一遍用例。
+# 仓库首页会出现一个绿勾 / 红叉 —— 任何人点进来都能看到用例是否真的通过，
+# 不用相信 README 里写的"全部通过"，看勾就行。
 on:
   push:
   pull_request:
@@ -24,9 +25,21 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run tests
+        # 用例 id 里有中文，强制 UTF-8 输出，避免日志里出现乱码
+        env:
+          PYTHONIOENCODING: utf-8
         run: python -m pytest -v
 
-      - name: Upload log
+      - name: Upload HTML report
+        # if: always() —— 用例失败时也要把报告传上来，那才是最有价值的时刻
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-html-report
+          path: reports/
+          if-no-files-found: ignore
+
+      - name: Upload request log
         if: always()
         uses: actions/upload-artifact@v4
         with:

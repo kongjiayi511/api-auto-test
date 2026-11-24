@@ -19,6 +19,7 @@ pytest 共享夹具（fixture）
 
 import pytest
 
+from common.config_reader import ALT_BASE_URL
 from common.request_client import ApiClient
 
 
@@ -26,10 +27,26 @@ from common.request_client import ApiClient
 def api():
     """整个会话共用一个接口客户端（复用连接，比每次新建快）
 
-    base_url 从 config.ini 读，所以 Day3 那个"改配置切环境"的能力
+    base_url 从 config.ini 读，所以"改配置切环境"的能力
     在这里自动生效 —— 5 条用例不用改一个字就能指向别的环境。
     """
     return ApiClient()
+
+
+@pytest.fixture(scope="session")
+def api_alt():
+    """指向"异常场景站点"的第二个客户端
+
+    为什么要有第二个：
+      被测主站（jsonplaceholder）只会返回 404，
+      而 400 / 405 / 500 这类状态码它造不出来。
+      用 httpbin 补上这几类，才能覆盖完整的 4xx / 5xx 判断。
+
+    地址同样来自 config.ini 的 [alt_env]，不写死在代码里。
+    """
+    if not ALT_BASE_URL:
+        pytest.skip("config.ini 未配置 [alt_env]，跳过异常场景用例")
+    return ApiClient(base_url=ALT_BASE_URL)
 
 
 @pytest.fixture()

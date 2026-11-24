@@ -53,6 +53,14 @@ class ApiClient:
         return resp
 
     # ---------- 对外提供的便捷方法 ----------
+    def request(self, method, path, **kwargs):
+        """通用入口：方法名由调用方给（数据驱动就靠它）
+
+        Excel 里那一列"方法"填 POST 还是 GET，最终都走到这里，
+        不用为每种方法写一堆 if/else。
+        """
+        return self._send(method.upper(), path, **kwargs)
+
     def get(self, path, **kwargs):
         return self._send("GET", path, **kwargs)
 
@@ -61,6 +69,11 @@ class ApiClient:
 
     def put(self, path, **kwargs):
         return self._send("PUT", path, **kwargs)
+
+    def patch(self, path, **kwargs):
+        # PATCH 是"局部更新"：只提交要改的字段，其余保持原样
+        # 和 PUT 的区别经常被面试问到，别混
+        return self._send("PATCH", path, **kwargs)
 
     def delete(self, path, **kwargs):
         return self._send("DELETE", path, **kwargs)

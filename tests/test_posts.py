@@ -19,11 +19,14 @@ posts 资源接口测试用例
   3. 不要写 print —— 断言失败时 pytest 会自己告诉你期望值和实际值
 """
 
+import pytest
+
 
 class TestPosts:
     """posts 资源的接口用例"""
 
     # ---------- 用例 1：查一条存在的 ----------
+    @pytest.mark.smoke
     def test_get_single_post(self, api):
         """查 id=1 的文章：应返回 200，且内容确实是那一条"""
         # 执行
@@ -60,6 +63,7 @@ class TestPosts:
         assert all(item["userId"] == 1 for item in data), "存在 userId 不为 1 的数据"
 
     # ---------- 用例 3：新建 ----------
+    @pytest.mark.smoke
     def test_create_post(self, api, new_post_payload):
         """新建文章：应返回 201（不是 200！），且回显提交的内容"""
         resp = api.post("/posts", json=new_post_payload)
@@ -75,6 +79,7 @@ class TestPosts:
         assert data.get("id") is not None, "新建后没有返回 id"
 
     # ---------- 用例 4：查一条不存在的（异常场景）----------
+    @pytest.mark.negative
     def test_get_nonexistent_post_returns_404(self, api):
         """查不存在的资源：应返回 404
 
