@@ -1,0 +1,4 @@
+# 统一换行符：仓库内用 LF，Windows 检出时自动转 CRLF
+* text=auto eol=lf
+*.png binary
+*.jpg binary

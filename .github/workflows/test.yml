@@ -1,0 +1,35 @@
+name: api-test
+
+# 每次 push 和 PR 都自动跑一遍用例
+# 仓库首页会出现一个绿勾 / 红叉 —— 任何人点进来都能看到用例是否真的通过
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run tests
+        run: python -m pytest -v
+
+      - name: Upload log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-log
+          path: logs/
+          if-no-files-found: ignore

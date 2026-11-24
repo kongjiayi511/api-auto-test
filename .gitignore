@@ -1,0 +1,27 @@
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+env/
+
+# ---------- pytest ----------
+.pytest_cache/
+report.html
+reports/
+
+# ---------- 运行时产物 ----------
+logs/*.log
+logs/*.html
+*.log
+
+# ---------- 本地学习资料（不进公开仓库）----------
+_learning/
+
+# ---------- 编辑器 / 系统 ----------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
